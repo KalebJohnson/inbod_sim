@@ -33,9 +33,9 @@ function getRandomInt(min, max) {
 
 
 const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(({
-    origin = [getRandomInt(-50,50), getRandomInt(-50,50)],
-    mass = getRandomInt(10,200),
-    radius = mass/100,
+    origin,
+    mass,
+    radius,
     color = "white",
     x_vel = 0,
     y_vel = 0,
@@ -47,29 +47,6 @@ const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(
     let x_pos = origin[0];
     let y_pos = origin[1];
   
-    const set_x_vel = (value: number) => {
-      x_vel = value;
-    };
-  
-    const set_y_vel = (value: number) => {
-      y_vel = value;
-    };
-  
-    const set_x_acc = (value: number) => {
-      x_acc = value;
-    };
-  
-    const set_y_acc = (value: number) => {
-      y_acc = value;
-    };
-  
-    const change_x_pos = (value: number) => {
-      x_pos += value;
-    };
-  
-    const change_y_pos = (value: number) => {
-      y_pos += value;
-    };
 
     //const bodyRef = useRef()
     

@@ -33,13 +33,38 @@ function App() {
   }
 
   let bodies = Array(10).fill(0)
-  let allBodies = bodies.map((body, ind) => { return body = {ref:createRef()}})
+
+  function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
+  }
+
+  const allBodies = bodies.map((body, ind) => {
+
+    let getMass = getRandomInt(10,200)
+
+    return body = {
+      ref: createRef(),
+      origin: [getRandomInt(-50,50), getRandomInt(-50,50)],
+      mass: getMass,
+      radius: getMass/100,
+    }
+
+  })
+
 
   return (
     <div className="wrapper">
       <Canvas shadows camera={{ position: [0,0,100], fov: 50 }} >
         {
-          allBodies.map((body) => <Body ref={body.ref} others={allBodies}/>)
+          allBodies.map((body) => (
+              <Body 
+                {...body}
+                others={allBodies}
+                />
+            )
+          )
         }
       </Canvas>
     </div>
