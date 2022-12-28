@@ -1,6 +1,6 @@
-import {ReactElement, useRef, useState, useEffect, createRef} from 'react';
+import {ReactElement, useRef, useState, useEffect, createRef, Suspense} from 'react';
 import { Canvas, useFrame, extend, useThree, useLoader} from '@react-three/fiber';
-import { Sphere, Stars } from '@react-three/drei';
+import { Sphere, Stars, OrbitControls } from '@react-three/drei';
 import { uuid } from 'uuidv4';
 import './App.css';
 
@@ -40,32 +40,45 @@ function App() {
     return Math.floor(Math.random() * (max - min) + min)
   }
 
-  const allBodies = bodies.map((body, ind) => {
+  const allBodies = bodies.map((body) => {
 
     let getMass = getRandomInt(10,200)
 
     return body = {
       ref: createRef(),
-      origin: [getRandomInt(-50,50), getRandomInt(-50,50)],
-      mass: getMass,
-      radius: getMass/100,
+      origin: [getRandomInt(-50,50), getRandomInt(-50,50),getRandomInt(-50,50)],
+      mass: 10,
+      radius: 2,
     }
 
   })
 
+  allBodies.push(
+    {
+      ref: createRef(),
+      origin: [0, 0, 0],
+      mass: 100,
+      radius: 5,
+      color:'red',
+      type:'star'
+    }
+  )
 
   return (
     <div className="wrapper">
       <Canvas shadows camera={{ position: [0,0,100], fov: 50 }} >
-        {
-          allBodies.map((body) => (
-              <Body 
-                {...body}
-                others={allBodies}
-                />
+        <Suspense fallback={null}>
+          {
+            allBodies.map((body) => (
+                <Body 
+                  {...body}
+                  others={allBodies}
+                  />
+              )
             )
-          )
-        }
+          }
+          <OrbitControls/>
+        </Suspense>
       </Canvas>
     </div>
   );

@@ -11,5 +11,6 @@ export interface BodyProps {
     x_acc?: number;
     y_acc?: number;
     others?: any;
+    type?:any;
   }
 
