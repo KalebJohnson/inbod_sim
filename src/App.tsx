@@ -43,7 +43,7 @@ function App() {
   const allBodies = bodies.map((body) => {
 
     let getMass = getRandomInt(10,200)
-
+    
     return body = {
       ref: createRef(),
       origin: [getRandomInt(-50,50), getRandomInt(-50,50),getRandomInt(-50,50)],
