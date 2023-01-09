@@ -1,16 +1,15 @@
-import { ReactElement } from "react";
+import {ReactElement} from 'react';
 
 export interface BodyProps {
-    ref: React.RefObject<ReactElement>;
-    origin: Array<number>;
-    mass: number;
-    radius: any;
-    color?: string;
-    x_vel?: number;
-    y_vel?: number;
-    x_acc?: number;
-    y_acc?: number;
-    others?: any;
-    type?:any;
-  }
-
+  ref: React.RefObject<ReactElement>;
+  origin: Array<number>;
+  mass: number;
+  radius: any;
+  color?: string;
+  x_vel?: number;
+  y_vel?: number;
+  x_acc?: number;
+  y_acc?: number;
+  others?: any;
+  type?: any;
+}
