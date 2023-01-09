@@ -1,23 +1,60 @@
-import {createRef, Suspense} from 'react';
+import {
+  ReactElement,
+  useRef,
+  useState,
+  useEffect,
+  createRef,
+  Suspense,
+} from 'react';
 import {
   Canvas,
-  // eslint-disable-next-line node/no-extraneous-import
+  useFrame,
+  extend,
+  useThree,
+  useLoader,
 } from '@react-three/fiber';
-import {OrbitControls} from '@react-three/drei';
+import {Sphere, Stars, OrbitControls} from '@react-three/drei';
+import {uuid} from 'uuidv4';
 import './App.css';
 
-import Body from './components/3D/Body';
+import Body from './comps/3D/Body';
+
+function Header({title}: {title?: string}): ReactElement {
+  return <h1>{title}</h1>;
+}
 
 function App() {
+  const [count, setCount] = useState<number>(0);
+
+  function getPermutations(array, size) {
+    function p(t, i) {
+      if (t.length === size) {
+        result.push(t);
+        return;
+      }
+      if (i + 1 > array.length) {
+        return;
+      }
+      p(t.concat(array[i]), i + 1);
+      p(t, i + 1);
+    }
+
+    const result = [];
+    p([], 0);
+    return result;
+  }
+
   const bodies = Array(10).fill(0);
 
-  function getRandomInt(min: number, max: number) {
+  function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
   }
 
   const allBodies = bodies.map(body => {
+    const getMass = getRandomInt(10, 200);
+
     return (body = {
       ref: createRef(),
       origin: [
@@ -35,8 +72,8 @@ function App() {
     origin: [0, 0, 0],
     mass: 100,
     radius: 5,
-    //color: 'red',
-    //type: 'star',
+    color: 'red',
+    type: 'star',
   });
 
   return (
