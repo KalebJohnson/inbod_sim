@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import React, {FC, ReactElement, useEffect, useRef, useState} from 'react';
 import {Sphere} from '@react-three/drei';
 import {BodyProps} from '../../interfaces/3D';
 import {useFrame} from '@react-three/fiber';
@@ -12,7 +12,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(
+const Body: FC<BodyProps> = React.forwardRef<ReactElement>(
   (
     {
       origin,
@@ -28,16 +28,14 @@ const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(
       others = [],
       type = 'body',
     },
-    ref
+    ref 
   ) => {
-    const [refReady, setRefReady] = useState(false);
-
     const x_pos = origin[0];
     const y_pos = origin[1];
     const z_pos = origin[2];
 
     //Calculate acceleration relative to mass/position and the mass/position of other bodies
-    function gravitate(ref, otherBodyRef) {
+    function gravitate(ref: object, otherBodyRef: object) {
       // get distance of other body relative to current position
       const dx = Math.abs(
         ref.ref.current.position.x - otherBodyRef.current.position.x
@@ -82,36 +80,20 @@ const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(
       }
     }
 
-    function getPhysPairs(array, ref) {
-      const index = array.indexOf(ref);
+    useFrame(() => {
+      const thisRef = others.find(
+        (body: object) => body.ref.current.uuid === ref.current.uuid
+      );
+      const index = others.indexOf(ref);
 
       if (index > -1) {
-        array.splice(index, 1);
+        others.splice(index, 1);
       }
 
-      array.map((otherBody, ind) => {
-        gravitate(ref.ref, otherBody.ref);
+      others.map((otherBody: object) => {
+        gravitate(thisRef, otherBody.ref);
       });
-    }
-
-    //const bodyRef = useRef()
-
-    useFrame(() => {
-      if (ref.current) {
-        const thisRef = others.find(
-          body => body.ref.current.uuid === ref.current.uuid
-        );
-        const index = others.indexOf(ref);
-
-        if (index > -1) {
-          others.splice(index, 1);
-        }
-
-        others.map((otherBody, ind) => {
-          gravitate(thisRef, otherBody.ref);
-        });
-        update();
-      }
+      update();
     });
 
     let xv = 0;
@@ -134,7 +116,6 @@ const Body: React.FunctionComponent<BodyProps> = React.forwardRef<ReactElement>(
     return (
       <Sphere
         ref={ref}
-        args={[20, 256, 256]}
         position={[x_pos, y_pos, z_pos]}
         args={[size, 256, 256]}
       >

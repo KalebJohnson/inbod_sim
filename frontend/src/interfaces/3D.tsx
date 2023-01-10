@@ -1,7 +1,6 @@
 import {ReactElement} from 'react';
 
 export interface BodyProps {
-  ref: React.RefObject<ReactElement>;
   origin: Array<number>;
   mass: number;
   radius: any;

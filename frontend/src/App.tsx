@@ -24,29 +24,10 @@ function Header({title}: {title?: string}): ReactElement {
 }
 
 function App() {
-  const [count, setCount] = useState<number>(0);
-
-  function getPermutations(array, size) {
-    function p(t, i) {
-      if (t.length === size) {
-        result.push(t);
-        return;
-      }
-      if (i + 1 > array.length) {
-        return;
-      }
-      p(t.concat(array[i]), i + 1);
-      p(t, i + 1);
-    }
-
-    const result = [];
-    p([], 0);
-    return result;
-  }
 
   const bodies = Array(10).fill(0);
 
-  function getRandomInt(min, max) {
+  function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
@@ -56,7 +37,7 @@ function App() {
     const getMass = getRandomInt(10, 200);
 
     return (body = {
-      ref: createRef(),
+      ref: useRef<ReactElement>(),
       origin: [
         getRandomInt(-50, 50),
         getRandomInt(-50, 50),
@@ -68,7 +49,7 @@ function App() {
   });
 
   allBodies.push({
-    ref: createRef(),
+    ref: useRef<ReactElement>(),
     origin: [0, 0, 0],
     mass: 100,
     radius: 5,
@@ -76,12 +57,22 @@ function App() {
     type: 'star',
   });
 
+  console.log(allBodies);
+
   return (
     <div className="wrapper">
       <Canvas shadows camera={{position: [0, 0, 100], fov: 50}}>
         <Suspense fallback={null}>
-          {allBodies.map(body => (
-            <Body {...body} others={allBodies} />
+          {allBodies.map((body: object, ind: number) => (
+            <Body
+              origin={body.origin}
+              mass={body.mass}
+              radius={body.radius}
+              others={allBodies}
+              ref={body.ref}
+              {...body}
+              key={ind}
+            />
           ))}
           <OrbitControls />
         </Suspense>
